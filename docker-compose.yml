@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  # Base de données PostgreSQL
+  db:
+    image: postgres:15
+    container_name: odoo_imprimante3d_db
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-odoo_imprimante3d}
+      - POSTGRES_USER=${POSTGRES_USER:-odoo}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-odoo_password_secure}
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+    restart: unless-stopped
+    networks:
+      - odoo-network
+
+  # Application Odoo
+  odoo:
+    build: .
+    container_name: odoo_imprimante3d_app
+    depends_on:
+      - db
+    ports:
+      - "${ODOO_PORT:-8069}:8069"
+    environment:
+      - HOST=db
+      - USER=${POSTGRES_USER:-odoo}
+      - PASSWORD=${POSTGRES_PASSWORD:-odoo_password_secure}
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./config:/etc/odoo
+      - ./addons:/mnt/extra-addons
+      - ./logs:/var/log/odoo
+    restart: unless-stopped
+    networks:
+      - odoo-network
+    command: odoo --config=/etc/odoo/odoo.conf
+
+networks:
+  odoo-network:
+    driver: bridge
+
+volumes:
+  odoo-web-data:
+    name: odoo_imprimante3d_web_data
+  odoo-db-data:
+    name: odoo_imprimante3d_db_data

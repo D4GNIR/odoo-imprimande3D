@@ -2,3 +2,18 @@
 step1.md
 step2.md
 step3.md
+
+# Variables d'environnement
+.env
+
+# Logs Docker
+logs/*.log
+
+# Données de développement
+*.pyc
+__pycache__/
+.pytest_cache/
+
+# Volumes Docker (si créés localement)
+odoo-web-data/
+odoo-db-data/
