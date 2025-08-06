@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+# type: ignore
 
-from odoo import models, fields, api
+from odoo import models, fields, api  # noqa
 from datetime import date
 
 
