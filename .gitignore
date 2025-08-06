@@ -5,6 +5,7 @@ step3.md
 
 # Variables d'environnement
 .env
+.env.local
 
 # Logs Docker
 logs/*.log
@@ -17,3 +18,11 @@ __pycache__/
 # Volumes Docker (si créés localement)
 odoo-web-data/
 odoo-db-data/
+
+# Fichiers Odoo.sh
+.odoo/
+filestore/
+
+# IDE
+.vscode/
+.idea/
