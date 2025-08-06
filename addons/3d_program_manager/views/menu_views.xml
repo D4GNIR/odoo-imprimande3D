@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Menu principal Impression 3D -->
+    <menuitem id="printing_3d_main_menu"
+              name="Impression 3D"
+              web_icon="3d_program_manager,static/description/icon.png"
+              sequence="50"/>
+    
+    <!-- Sous-menu Programmes -->
+    <menuitem id="printing_program_menu"
+              name="Programmes"
+              parent="printing_3d_main_menu"
+              action="printing_program_action"
+              sequence="10"/>
+
+</odoo>

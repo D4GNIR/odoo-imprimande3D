@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vue liste des programmes 3D -->
+    <record id="printing_program_tree_view" model="ir.ui.view">
+        <field name="name">printing.program.tree</field>
+        <field name="model">printing.program</field>
+        <field name="arch" type="xml">
+            <tree string="Programmes d'impression 3D">
+                <field name="name"/>
+                <field name="version"/>
+                <field name="import_date"/>
+                <field name="filename"/>
+                <field name="file_extension"/>
+                <field name="file_size"/>
+                <field name="notes"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vue formulaire des programmes 3D -->
+    <record id="printing_program_form_view" model="ir.ui.view">
+        <field name="name">printing.program.form</field>
+        <field name="model">printing.program</field>
+        <field name="arch" type="xml">
+            <form string="Programme d'impression 3D">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" placeholder="Nom du programme..."/>
+                            <field name="version"/>
+                            <field name="import_date"/>
+                        </group>
+                        <group>
+                            <field name="filename" readonly="1"/>
+                            <field name="file_extension" readonly="1"/>
+                            <field name="file_size" readonly="1"/>
+                        </group>
+                    </group>
+                    
+                    <group string="Fichier du programme">
+                        <field name="filename" invisible="1"/>
+                        <field name="file" filename="filename"/>
+                    </group>
+                    
+                    <group string="Notes et commentaires">
+                        <field name="notes" nolabel="1" placeholder="Ajoutez vos commentaires sur ce programme..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue de recherche/filtres -->
+    <record id="printing_program_search_view" model="ir.ui.view">
+        <field name="name">printing.program.search</field>
+        <field name="model">printing.program</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher programmes 3D">
+                <field name="name" string="Nom" filter_domain="[('name', 'ilike', self)]"/>
+                <field name="version" string="Version"/>
+                <field name="filename" string="Fichier"/>
+                <field name="file_extension" string="Extension"/>
+                
+                <filter name="filter_gcode" string="Fichiers GCODE" domain="[('file_extension', '=', '.gcode')]"/>
+                <filter name="filter_stl" string="Fichiers STL" domain="[('file_extension', '=', '.stl')]"/>
+                <filter name="filter_obj" string="Fichiers OBJ" domain="[('file_extension', '=', '.obj')]"/>
+                
+                <separator/>
+                <filter name="filter_recent" string="Récents (30 jours)" 
+                        domain="[('import_date', '&gt;=', (context_today() - datetime.timedelta(days=30)).strftime('%Y-%m-%d'))]"/>
+                
+                <group expand="0" string="Grouper par">
+                    <filter name="group_extension" string="Extension" context="{'group_by': 'file_extension'}"/>
+                    <filter name="group_version" string="Version" context="{'group_by': 'version'}"/>
+                    <filter name="group_date" string="Date d'import" context="{'group_by': 'import_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir la vue -->
+    <record id="printing_program_action" model="ir.actions.act_window">
+        <field name="name">Programmes 3D</field>
+        <field name="res_model">printing.program</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="printing_program_search_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Créez votre premier programme d'impression 3D !
+            </p>
+            <p>
+                Uploadez vos fichiers .gcode, .stl, .obj et gérez-les facilement 
+                avec versioning et métadonnées.
+            </p>
+        </field>
+    </record>
+
+</odoo>
